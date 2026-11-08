@@ -1,0 +1,24 @@
+# Each stage consumes the original recording or the named output of a prior stage.
+stages:
+  - id: roformer
+    input: source
+    model: BS-Roformer-SW.ckpt
+    sample_rate: 44100
+    outputs: [bass, drums, vocals, guitar, piano, other]
+  - id: drumsep
+    input: roformer.drums
+    model: MDX23C-DrumSep-aufr33-jarredou.ckpt
+    sample_rate: 44100
+    outputs: [kick, snare, toms, hh, ride, crash]
+scene:
+  - roformer.bass
+  - drumsep.kick
+  - drumsep.snare
+  - drumsep.toms
+  - drumsep.hh
+  - drumsep.ride
+  - drumsep.crash
+  - roformer.vocals
+  - roformer.guitar
+  - roformer.piano
+  - roformer.other
